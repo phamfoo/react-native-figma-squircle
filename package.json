@@ -1,12 +1,14 @@
 {
   "name": "react-native-figma-squircle",
+  "description": "Figma-flavored squircles for React Native",
+  "author": "Tien Pham",
   "version": "0.0.0",
+  "license": "MIT",
   "main": "lib/commonjs/index.js",
   "react-native": "src/index.tsx",
   "source": "src/index.tsx",
   "module": "lib/module/index.js",
   "types": "lib/typescript/index.d.ts",
-  "license": "MIT",
   "scripts": {
     "prepare": "bob build && husky install",
     "tsc": "tsc --noEmit",
@@ -33,6 +35,16 @@
     "react-native-builder-bob": "^0.18.1",
     "react-native-svg": "12.1.0",
     "typescript": "^4.2.4"
+  },
+  "keywords": [
+    "squircle",
+    "react",
+    "react-native",
+    "figma"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tienphaw/react-native-figma-squircle.git"
   },
   "files": [
     "src",
