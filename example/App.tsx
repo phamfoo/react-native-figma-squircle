@@ -38,23 +38,24 @@ export default function App() {
               setCornerSmoothing(Math.round(value * 100) / 100)
             }}
           />
+          <View style={{ height: 24 }} />
         </View>
         <View style={styles.squircles}>
           <SquircleView
             style={styles.squircle}
-            cornerRadius={cornerRadius}
-            cornerSmoothing={cornerSmoothing}
-            fillColor="#4F46E5"
-            strokeColor="#6366F1"
-            strokeWidth={4}
+            squircleParams={{
+              cornerRadius,
+              cornerSmoothing,
+              fillColor: '#4F46E5',
+              strokeColor: '#6366F1',
+            }}
           />
 
           <MaskedView
             maskElement={
               <SquircleView
                 style={StyleSheet.absoluteFill}
-                cornerRadius={cornerRadius}
-                cornerSmoothing={cornerSmoothing}
+                squircleParams={{ cornerRadius, cornerSmoothing }}
               />
             }
           >
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     backgroundColor: '#171717',
-    padding: 16,
+    paddingHorizontal: 16,
   },
   label: {
     fontSize: 16,
@@ -118,10 +119,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   squircle: {
-    width: '60%',
+    width: '50%',
     aspectRatio: 1,
   },
   sliders: {
-    paddingVertical: 28,
+    paddingTop: 28,
   },
 })

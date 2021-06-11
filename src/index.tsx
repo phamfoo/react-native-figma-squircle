@@ -4,37 +4,29 @@ import { PropsWithChildren, useState } from 'react'
 import Svg, { Color, Path } from 'react-native-svg'
 import { getSvgPath } from 'figma-squircle'
 
-interface SquircleViewProps extends ViewProps, SquircleBackgroundProps {}
-
-function SquircleView({
-  cornerRadius,
-  cornerSmoothing,
-  fillColor,
-  strokeColor,
-  strokeWidth,
-  children,
-  ...rest
-}: PropsWithChildren<SquircleViewProps>) {
-  return (
-    <View {...rest}>
-      <SquircleBackground
-        cornerRadius={cornerRadius}
-        cornerSmoothing={cornerSmoothing}
-        fillColor={fillColor}
-        strokeColor={strokeColor}
-        strokeWidth={strokeWidth}
-      />
-      {children}
-    </View>
-  )
-}
-
-interface SquircleBackgroundProps {
+interface SquircleParams {
   cornerRadius: number
   cornerSmoothing: number
   fillColor?: Color
   strokeColor?: Color
   strokeWidth?: number
+}
+
+interface SquircleViewProps extends ViewProps {
+  squircleParams: SquircleParams
+}
+
+function SquircleView({
+  squircleParams,
+  children,
+  ...rest
+}: PropsWithChildren<SquircleViewProps>) {
+  return (
+    <View {...rest}>
+      <SquircleBackground {...squircleParams} />
+      {children}
+    </View>
+  )
 }
 
 function SquircleBackground({
@@ -43,7 +35,7 @@ function SquircleBackground({
   fillColor = '#000',
   strokeColor = '#000',
   strokeWidth = 0,
-}: SquircleBackgroundProps) {
+}: SquircleParams) {
   const [squircleSize, setSquircleSize] =
     useState<{ width: number; height: number } | null>(null)
 
