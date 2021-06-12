@@ -40,7 +40,7 @@ function SquircleBackground({
     useState<{ width: number; height: number } | null>(null)
 
   return (
-    <Svg
+    <View
       style={StyleSheet.absoluteFill}
       onLayout={(e) => {
         setSquircleSize({
@@ -49,24 +49,26 @@ function SquircleBackground({
         })
       }}
     >
-      <Path
-        d={
-          squircleSize
-            ? getSvgPath({
-                width: squircleSize.width - strokeWidth,
-                height: squircleSize.height - strokeWidth,
-                cornerSmoothing,
-                cornerRadius,
-              })
-            : ''
-        }
-        translateX={strokeWidth / 2}
-        translateY={strokeWidth / 2}
-        fill={fillColor}
-        stroke={strokeColor}
-        strokeWidth={strokeWidth}
-      />
-    </Svg>
+      <Svg>
+        <Path
+          d={
+            squircleSize
+              ? getSvgPath({
+                  width: squircleSize.width - strokeWidth,
+                  height: squircleSize.height - strokeWidth,
+                  cornerSmoothing,
+                  cornerRadius,
+                })
+              : ''
+          }
+          translateX={strokeWidth / 2}
+          translateY={strokeWidth / 2}
+          fill={fillColor}
+          stroke={strokeColor}
+          strokeWidth={strokeWidth}
+        />
+      </Svg>
+    </View>
   )
 }
 
