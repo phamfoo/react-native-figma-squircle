@@ -1,128 +1,166 @@
-import React, { useState } from 'react'
+import React, { PropsWithChildren } from 'react'
 import { StatusBar } from 'expo-status-bar'
-import { SafeAreaView, StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View, Text, Pressable } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import MaskedView from '@react-native-community/masked-view'
+import MaskedView, {
+  MaskedViewProps,
+} from '@react-native-community/masked-view'
 import { SquircleView } from 'react-native-figma-squircle'
-import RNSlider, {
-  SliderProps as RNSliderProps,
-} from '@react-native-community/slider'
 
 export default function App() {
-  const [cornerRadius, setCornerRadius] = useState(30)
-  const [cornerSmoothing, setCornerSmoothing] = useState(0.8)
-
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.contentContainer}>
-        <StatusBar style="light" />
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: '#171717',
+      }}
+    >
+      <StatusBar style="light" />
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          paddingHorizontal: 8,
+          alignItems: 'center',
+        }}
+      >
+        <ContentColumn>
+          <Label>{`Without\n corner smoothing`}</Label>
+          <Spacer />
 
-        <View style={styles.sliders}>
-          <Slider
-            label="Corner radius"
-            minimumValue={20}
-            maximumValue={100}
-            step={1}
-            value={cornerRadius}
-            onValueChange={setCornerRadius}
+          <GradientView
+            maskElement={
+              <View
+                style={[
+                  StyleSheet.absoluteFill,
+                  { borderRadius: 48, backgroundColor: '#000' },
+                ]}
+              />
+            }
           />
 
-          <View style={{ height: 24 }} />
-          <Slider
-            label="Corner smoothing"
-            minimumValue={0}
-            maximumValue={1}
-            step={0.01}
-            value={cornerSmoothing}
-            onValueChange={(value) => {
-              setCornerSmoothing(Math.round(value * 100) / 100)
+          <Spacer />
+
+          <Pressable style={{ width: '100%' }}>
+            {({ pressed }) => {
+              return (
+                <View
+                  style={{
+                    paddingVertical: 22,
+                    alignItems: 'center',
+                    borderRadius: 18,
+                    backgroundColor: pressed ? '#3730A3' : '#4F46E5',
+                  }}
+                >
+                  <ButtonText>Button</ButtonText>
+                </View>
+              )
             }}
-          />
-          <View style={{ height: 24 }} />
-        </View>
-        <View style={styles.squircles}>
-          <SquircleView
-            style={styles.squircle}
-            squircleParams={{
-              cornerRadius,
-              cornerSmoothing,
-              fillColor: '#4F46E5',
-              strokeColor: '#6366F1',
-            }}
-          />
+          </Pressable>
+        </ContentColumn>
 
-          <MaskedView
+        <ContentColumn>
+          <Label>{`With\n corner smoothing`}</Label>
+          <Spacer />
+
+          <GradientView
             maskElement={
               <SquircleView
                 style={StyleSheet.absoluteFill}
-                squircleParams={{ cornerRadius, cornerSmoothing }}
+                squircleParams={{ cornerRadius: 48, cornerSmoothing: 1 }}
               />
             }
-          >
-            <LinearGradient
-              style={styles.squircle}
-              start={{ x: 1, y: 0 }}
-              end={{ x: 0, y: 1 }}
-              colors={['#FF1B6B', '#45CAFF']}
-            />
-          </MaskedView>
-        </View>
-      </View>
-    </SafeAreaView>
-  )
-}
+          />
 
-interface SliderProps extends Omit<RNSliderProps, 'ref'> {
-  label: string
-}
+          <Spacer />
 
-function Slider({ label, value, ...rest }: SliderProps) {
-  return (
-    <View>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Text style={styles.label}>{label}</Text>
-        <Text style={styles.sliderValue}>{value}</Text>
+          <Pressable style={{ width: '100%' }}>
+            {({ pressed }) => {
+              return (
+                <SquircleView
+                  style={{
+                    paddingVertical: 22,
+                    alignItems: 'center',
+                  }}
+                  squircleParams={{
+                    cornerRadius: 18,
+                    cornerSmoothing: 1,
+                    fillColor: pressed ? '#3730A3' : '#4F46E5',
+                  }}
+                >
+                  <ButtonText>Button</ButtonText>
+                </SquircleView>
+              )
+            }}
+          </Pressable>
+        </ContentColumn>
       </View>
-      <RNSlider
-        value={value}
-        minimumTrackTintColor="#6e78ff"
-        maximumTrackTintColor="#737373"
-        {...rest}
-      />
     </View>
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#171717',
-  },
-  contentContainer: {
-    flex: 1,
-    backgroundColor: '#171717',
-    paddingHorizontal: 16,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#A3A3A3',
-  },
-  sliderValue: {
-    fontSize: 16,
-    color: '#E5E5E5',
-    fontWeight: 'bold',
-  },
-  squircles: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-  },
-  squircle: {
-    width: '50%',
-    aspectRatio: 1,
-  },
-  sliders: {
-    paddingTop: 28,
-  },
-})
+function ContentColumn({ children }: PropsWithChildren<{}>) {
+  return (
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        paddingHorizontal: 8,
+      }}
+    >
+      {children}
+    </View>
+  )
+}
+
+function GradientView({
+  maskElement,
+}: {
+  maskElement: MaskedViewProps['maskElement']
+}) {
+  return (
+    <MaskedView
+      style={{ width: '100%', aspectRatio: 1 }}
+      maskElement={maskElement}
+    >
+      <LinearGradient
+        style={StyleSheet.absoluteFill}
+        start={{ x: 1, y: 0 }}
+        end={{ x: 0, y: 1 }}
+        colors={['#FF1B6B', '#45CAFF']}
+      />
+    </MaskedView>
+  )
+}
+
+function Spacer() {
+  return <View style={{ height: 24 }} />
+}
+
+function Label({ children }: PropsWithChildren<{}>) {
+  return (
+    <Text
+      style={{
+        fontWeight: '700',
+        color: '#D1D5DB',
+        fontSize: 16,
+        textAlign: 'center',
+      }}
+    >
+      {children}
+    </Text>
+  )
+}
+
+function ButtonText({ children }: PropsWithChildren<{}>) {
+  return (
+    <Text
+      style={{
+        color: '#E0E7FF',
+        fontWeight: 'bold',
+      }}
+    >
+      {children}
+    </Text>
+  )
+}
