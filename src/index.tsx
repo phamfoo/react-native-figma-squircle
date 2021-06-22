@@ -72,4 +72,5 @@ function SquircleBackground({
   )
 }
 
-export { SquircleView, SquircleParams }
+export { SquircleView }
+export type { SquircleParams }
