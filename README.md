@@ -83,31 +83,33 @@ function ProfilePicture() {
 
 Inherits [View Props](https://facebook.github.io/react-native/docs/view#props)
 
-### squircleProps
-
-An object that controls how the squircle looks.
-
-```ts
-interface SquircleProps {
-  cornerRadius: number
-  cornerSmoothing: number
-  fillColor?: Color
-  strokeColor?: Color
-  strokeWidth?: number
-}
-```
+### squircleParams
 
 #### cornerSmoothing
 
-> `number`
+> `number` | **Required**
 
 Goes from 0 to 1, controls how smooth the corners should be.
 
 #### cornerRadius
 
+> `number` | defaults to `0`
+
+#### topLeftCornerRadius
+
 > `number`
 
-Similar to `borderRadius` in the `style` prop.
+#### topRightCornerRadius
+
+> `number`
+
+#### bottomRightCornerRadius
+
+> `number`
+
+#### bottomLeftCornerRadius
+
+> `number`
 
 #### fillColor
 
@@ -119,7 +121,7 @@ Similar to `backgroundColor` in the `style` prop.
 
 > `Color` | defaults to `#000`
 
-Similar to `backgroundColor` in the `style` prop.
+Similar to `borderColor` in the `style` prop.
 
 #### strokeWidth
 

@@ -5,7 +5,11 @@ import Svg, { Color, Path } from 'react-native-svg'
 import { getSvgPath } from 'figma-squircle'
 
 interface SquircleParams {
-  cornerRadius: number
+  cornerRadius?: number
+  topLeftCornerRadius?: number
+  topRightCornerRadius?: number
+  bottomRightCornerRadius?: number
+  bottomLeftCornerRadius?: number
   cornerSmoothing: number
   fillColor?: Color
   strokeColor?: Color
@@ -30,7 +34,11 @@ function SquircleView({
 }
 
 function SquircleBackground({
-  cornerRadius,
+  cornerRadius = 0,
+  topLeftCornerRadius,
+  topRightCornerRadius,
+  bottomRightCornerRadius,
+  bottomLeftCornerRadius,
   cornerSmoothing,
   fillColor = '#000',
   strokeColor = '#000',
@@ -58,6 +66,10 @@ function SquircleBackground({
                   height: squircleSize.height - strokeWidth,
                   cornerSmoothing,
                   cornerRadius,
+                  topLeftCornerRadius,
+                  topRightCornerRadius,
+                  bottomRightCornerRadius,
+                  bottomLeftCornerRadius,
                 })
               : ''
           }
