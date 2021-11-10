@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ViewProps, View, StyleSheet } from 'react-native'
 import { PropsWithChildren, useState } from 'react'
-import Svg, { Color, Path } from 'react-native-svg'
+import Svg, { Color, Path, LinearGradient, Stop, Defs } from 'react-native-svg'
 import { getSvgPath } from 'figma-squircle'
 
 interface SquircleParams {
@@ -14,6 +14,12 @@ interface SquircleParams {
   fillColor?: Color
   strokeColor?: Color
   strokeWidth?: number
+  linear?: {
+    colors: Color[],
+    locations?: number[],
+    start?: { width: number, height: number },
+    end?: { width: number, height: number }
+  }
 }
 
 interface SquircleViewProps extends ViewProps {
@@ -43,6 +49,7 @@ function SquircleBackground({
   fillColor = '#000',
   strokeColor = '#000',
   strokeWidth = 0,
+  linear
 }: SquircleParams) {
   const [squircleSize, setSquircleSize] =
     useState<{ width: number; height: number } | null>(null)
@@ -75,10 +82,28 @@ function SquircleBackground({
           }
           translateX={strokeWidth / 2}
           translateY={strokeWidth / 2}
-          fill={fillColor}
+          fill={linear ? "url(#paint0_linear)" : fillColor}
           stroke={strokeColor}
           strokeWidth={strokeWidth}
         />
+        {linear && (
+          <Defs>
+            <LinearGradient
+              id="paint0_linear"
+              x1={`${(linear.start?.width || 0.5) * 100}%`}
+              y1={`${(linear.start?.height || 0) * 100}%`}
+              x2={`${(linear.end?.width || 0.5) * 100}%`}
+              y2={`${(linear.end?.height || 1) * 100}%`}
+              gradientUnits="userSpaceOnUse"
+            >
+              {linear.locations ? linear.locations.map((loc,i) => 
+                  <Stop key={`stop${i}`} offset={`${loc}`} stopColor={linear.colors[i]} />) : 
+              Array(linear.colors.length).fill(0).map((_a,i) => 
+                  <Stop key={`stop${i}`} offset={`${((1/(linear.colors.length - 1)) * i).toFixed(1)}`} stopColor={linear.colors[i]} />)
+              }
+            </LinearGradient>
+          </Defs>
+        )}
       </Svg>
     </View>
   )
