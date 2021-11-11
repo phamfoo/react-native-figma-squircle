@@ -17,8 +17,8 @@ interface SquircleParams {
   linear?: {
     colors: Color[],
     locations?: number[],
-    start?: { width: number, height: number },
-    end?: { width: number, height: number }
+    start?: { x: number, y: number },
+    end?: { x: number, y: number }
   }
 }
 
@@ -90,10 +90,10 @@ function SquircleBackground({
           <Defs>
             <LinearGradient
               id="paint0_linear"
-              x1={`${(linear.start?.width || 0.5) * 100}%`}
-              y1={`${(linear.start?.height || 0) * 100}%`}
-              x2={`${(linear.end?.width || 0.5) * 100}%`}
-              y2={`${(linear.end?.height || 1) * 100}%`}
+              x1={`${(linear.start?.x || 0.5) * 100}%`}
+              y1={`${(linear.start?.y || 0) * 100}%`}
+              x2={`${(linear.end?.x || 0.5) * 100}%`}
+              y2={`${(linear.end?.y || 1) * 100}%`}
               gradientUnits="userSpaceOnUse"
             >
               {linear.locations ? linear.locations.map((loc,i) => 
