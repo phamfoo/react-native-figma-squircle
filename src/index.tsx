@@ -57,7 +57,12 @@ function SquircleBackground({
         })
       }}
     >
-      <Svg>
+      <Svg
+        width={squircleSize?.width ?? undefined}
+        height={squircleSize?.height ?? undefined}
+        viewBox={`0 0 ${squircleSize?.width ?? 0} ${squircleSize?.height ?? 0}`}
+        fill="none"
+      >
         <Path
           d={
             squircleSize
