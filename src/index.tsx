@@ -62,8 +62,8 @@ function SquircleBackground({
           d={
             squircleSize
               ? getSvgPath({
-                  width: squircleSize.width - strokeWidth,
-                  height: squircleSize.height - strokeWidth,
+                  width: Math.max(squircleSize.width - strokeWidth, 0),
+                  height: Math.max(squircleSize.height - strokeWidth, 0),
                   cornerSmoothing,
                   cornerRadius,
                   topLeftCornerRadius,
