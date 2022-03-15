@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ViewProps, View, StyleSheet } from 'react-native'
-import { PropsWithChildren, useState } from 'react'
-import Svg, { Color, Path } from 'react-native-svg'
+import { PropsWithChildren, ReactNode, useState } from 'react'
+import Svg, { ClipPath, Color, Defs, Path } from 'react-native-svg'
 import { getSvgPath } from 'figma-squircle'
 
 interface SquircleParams {
@@ -44,42 +44,71 @@ function SquircleBackground({
   strokeColor = '#000',
   strokeWidth = 0,
 }: SquircleParams) {
-  const [squircleSize, setSquircleSize] =
+  return (
+    <Rect style={StyleSheet.absoluteFill}>
+      {({ width, height }) => {
+        const squirclePath = getSvgPath({
+          width: width,
+          height: height,
+          cornerSmoothing,
+          cornerRadius,
+          topLeftCornerRadius,
+          topRightCornerRadius,
+          bottomRightCornerRadius,
+          bottomLeftCornerRadius,
+        })
+
+        if (strokeWidth > 0) {
+          // Since SVG doesn't support inner stroke, we double the stroke width
+          // and remove the outer half with clipPath
+          return (
+            <Svg>
+              <Defs>
+                <ClipPath id="clip">
+                  <Path d={squirclePath} />
+                </ClipPath>
+              </Defs>
+              <Path
+                clipPath="url(#clip)"
+                d={squirclePath}
+                fill={fillColor}
+                stroke={strokeColor}
+                strokeWidth={strokeWidth * 2}
+              />
+            </Svg>
+          )
+        } else {
+          return (
+            <Svg>
+              <Path d={squirclePath} fill={fillColor} />
+            </Svg>
+          )
+        }
+      }}
+    </Rect>
+  )
+}
+
+// Inspired by https://reach.tech/rect/
+interface RectProps extends ViewProps {
+  children: (rect: { width: number; height: number }) => ReactNode
+}
+
+function Rect({ children, ...rest }: RectProps) {
+  const [rect, setRect] =
     useState<{ width: number; height: number } | null>(null)
 
   return (
     <View
-      style={StyleSheet.absoluteFill}
+      {...rest}
       onLayout={(e) => {
-        setSquircleSize({
+        setRect({
           width: e.nativeEvent.layout.width,
           height: e.nativeEvent.layout.height,
         })
       }}
     >
-      <Svg>
-        <Path
-          d={
-            squircleSize
-              ? getSvgPath({
-                  width: Math.max(squircleSize.width - strokeWidth, 0),
-                  height: Math.max(squircleSize.height - strokeWidth, 0),
-                  cornerSmoothing,
-                  cornerRadius,
-                  topLeftCornerRadius,
-                  topRightCornerRadius,
-                  bottomRightCornerRadius,
-                  bottomLeftCornerRadius,
-                })
-              : ''
-          }
-          translateX={strokeWidth / 2}
-          translateY={strokeWidth / 2}
-          fill={fillColor}
-          stroke={strokeColor}
-          strokeWidth={strokeWidth}
-        />
-      </Svg>
+      {rect ? children(rect) : null}
     </View>
   )
 }
