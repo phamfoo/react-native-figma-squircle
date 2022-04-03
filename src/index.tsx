@@ -48,8 +48,8 @@ function SquircleBackground({
     <Rect style={StyleSheet.absoluteFill}>
       {({ width, height }) => {
         const squirclePath = getSvgPath({
-          width: width,
-          height: height,
+          width,
+          height,
           cornerSmoothing,
           cornerRadius,
           topLeftCornerRadius,
@@ -58,7 +58,15 @@ function SquircleBackground({
           bottomLeftCornerRadius,
         })
 
-        if (strokeWidth > 0) {
+        const hasStroke = strokeWidth > 0
+
+        if (!hasStroke) {
+          return (
+            <Svg>
+              <Path d={squirclePath} fill={fillColor} />
+            </Svg>
+          )
+        } else {
           // Since SVG doesn't support inner stroke, we double the stroke width
           // and remove the outer half with clipPath
           return (
@@ -75,12 +83,6 @@ function SquircleBackground({
                 stroke={strokeColor}
                 strokeWidth={strokeWidth * 2}
               />
-            </Svg>
-          )
-        } else {
-          return (
-            <Svg>
-              <Path d={squirclePath} fill={fillColor} />
             </Svg>
           )
         }
