@@ -115,5 +115,5 @@ function Rect({ children, ...rest }: RectProps) {
   )
 }
 
-export { SquircleView }
+export { SquircleView, getSvgPath }
 export type { SquircleParams, SquircleViewProps }
