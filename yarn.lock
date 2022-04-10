@@ -3117,10 +3117,10 @@ fbjs@^1.0.0:
     setimmediate "^1.0.5"
     ua-parser-js "^0.7.18"
 
-figma-squircle@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/figma-squircle/-/figma-squircle-0.2.0.tgz#7f077549d1591a02ef5f46af51a35876f9032a8f"
-  integrity sha512-vjQ+StXbyGURq7Q1TNrLTWG3oRoc7tV7lcOR/4rhAVqH7R4X8IwslTmKHvultgmcU9qCF9kV4rKiyjYInkJ59w==
+figma-squircle@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/figma-squircle/-/figma-squircle-0.2.1.tgz#08002658420076f318d846a558ee21de37ab8b27"
+  integrity sha512-UePsOSdigugsBvGZJAzrLeYY43fXy6iGQ7rz7bpEPd9jf54WbWM3jmgAF6VU0HANte1+hBiWb0PK6KyXTvXQdw==
 
 figures@^2.0.0:
   version "2.0.0"

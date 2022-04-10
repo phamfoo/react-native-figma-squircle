@@ -20,7 +20,7 @@
     "react-native-svg": "*"
   },
   "dependencies": {
-    "figma-squircle": "^0.2.0"
+    "figma-squircle": "^0.2.1"
   },
   "devDependencies": {
     "@types/react": "~16.9.35",
