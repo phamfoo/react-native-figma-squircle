@@ -62,7 +62,7 @@ function SquircleBackground({
 
         if (!hasStroke) {
           return (
-            <Svg width={width} height={height}>
+            <Svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`}>
               <Path d={squirclePath} fill={fillColor} />
             </Svg>
           )
@@ -70,7 +70,7 @@ function SquircleBackground({
           // Since SVG doesn't support inner stroke, we double the stroke width
           // and remove the outer half with clipPath
           return (
-            <Svg width={width} height={height}>
+            <Svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`}>
               <Defs>
                 <ClipPath id="clip">
                   <Path d={squirclePath} />
