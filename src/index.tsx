@@ -3,6 +3,7 @@ import { ViewProps, View, StyleSheet } from 'react-native'
 import { PropsWithChildren, ReactNode, useState } from 'react'
 import Svg, { ClipPath, Color, Defs, Path } from 'react-native-svg'
 import { getSvgPath } from 'figma-squircle'
+import { useId } from "@reach/auto-id";
 
 interface SquircleParams {
   cornerRadius?: number
@@ -44,6 +45,8 @@ function SquircleBackground({
   strokeColor = '#000',
   strokeWidth = 0,
 }: SquircleParams) {
+  const squircleId = useId()
+
   return (
     <Rect style={StyleSheet.absoluteFill}>
       {({ width, height }) => {
@@ -69,15 +72,17 @@ function SquircleBackground({
         } else {
           // Since SVG doesn't support inner stroke, we double the stroke width
           // and remove the outer half with clipPath
+          const clipPathId = `clip-${squircleId}`
+
           return (
             <Svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`}>
               <Defs>
-                <ClipPath id="clip">
+                <ClipPath id={clipPathId}>
                   <Path d={squirclePath} />
                 </ClipPath>
               </Defs>
               <Path
-                clipPath="url(#clip)"
+                clipPath={`url(#${clipPathId})`}
                 d={squirclePath}
                 fill={fillColor}
                 stroke={strokeColor}

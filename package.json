@@ -20,6 +20,7 @@
     "react-native-svg": "*"
   },
   "dependencies": {
+    "@reach/auto-id": "^0.17.0",
     "figma-squircle": "^0.2.1"
   },
   "devDependencies": {
