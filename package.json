@@ -2,7 +2,7 @@
   "name": "react-native-figma-squircle",
   "description": "Figma-flavored squircles for React Native",
   "author": "Tien Pham",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "license": "MIT",
   "main": "lib/commonjs/index.js",
   "react-native": "src/index.tsx",
