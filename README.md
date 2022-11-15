@@ -16,6 +16,13 @@ Figma has a great feature called [corner smoothing](https://help.figma.com/hc/en
 
 This library helps you bring those squircles to your React Native apps.
 
+## Before you install
+
+This library is a very light abstraction on top of [figma-squircle](https://github.com/tienphaw/figma-squircle). We also depend on [react-native-svg](https://github.com/react-native-svg/react-native-svg) to draw the SVG background. In many cases, it's a better idea to just use [figma-squircle](https://github.com/tienphaw/figma-squircle) directly:
+
+- You can use [react-native-skia](https://shopify.github.io/react-native-skia/docs/shapes/path) instead of `react-native-svg`.
+- More control and flexibility. For example, clipping can be done very easily using [Clip Path](https://shopify.github.io/react-native-skia/docs/group/#clip-path).
+
 ## Installation
 
 Install [react-native-svg](https://github.com/react-native-svg/react-native-svg)
@@ -49,32 +56,6 @@ function PinkSquircle() {
         fillColor: 'pink',
       }}
     />
-  )
-}
-```
-
-You can also use it with [MaskedView](https://github.com/react-native-masked-view/masked-view) to apply the squircle shape to an `Image`.
-
-```jsx
-import MaskedView from '@react-native-community/masked-view'
-
-function ProfilePicture() {
-  return (
-    <MaskedView
-      style={styles.profilePicture}
-      maskElement={
-        <SquircleView
-          style={StyleSheet.absoluteFill}
-          squircleParams={{
-            cornerRadius: 30,
-            cornerSmoothing: 0.7,
-            fillColor: 'pink',
-          }}
-        />
-      }
-    >
-      <Image style={StyleSheet.absoluteFill} source={{ uri: 'https://...' }} />
-    </MaskedView>
   )
 }
 ```
@@ -133,7 +114,3 @@ Similar to `borderWidth` in the `style` prop.
 
 - Figma team for publishing [this article](https://www.figma.com/blog/desperately-seeking-squircles/) and [MartinRGB](https://github.com/MartinRGB) for [figuring out all the math](https://github.com/MartinRGB/Figma_Squircles_Approximation) behind it.
 - [George Francis](https://github.com/georgedoescode) for creating [Squircley](https://squircley.app/), which was my introduction to squircles.
-
-## Related
-
-- [figma-squircle](https://github.com/tienphaw/figma-squircle) - This gives you just the SVG path so you can have your Figma-flavored squircles on other platforms as well.
