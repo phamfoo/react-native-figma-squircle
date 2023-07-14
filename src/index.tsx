@@ -3,7 +3,7 @@ import { ViewProps, View, StyleSheet } from 'react-native'
 import { PropsWithChildren, ReactNode, useState } from 'react'
 import Svg, { ClipPath, Color, Defs, Path } from 'react-native-svg'
 import { getSvgPath } from 'figma-squircle'
-import { useId } from "@reach/auto-id";
+import { nanoid } from 'nanoid'
 
 interface SquircleParams {
   cornerRadius?: number
@@ -45,7 +45,7 @@ function SquircleBackground({
   strokeColor = '#000',
   strokeWidth = 0,
 }: SquircleParams) {
-  const squircleId = useId()
+  const squircleId = nanoid()
 
   return (
     <Rect style={StyleSheet.absoluteFill}>
