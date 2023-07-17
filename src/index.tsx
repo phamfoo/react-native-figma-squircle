@@ -3,6 +3,7 @@ import { ViewProps, View, StyleSheet } from 'react-native'
 import { PropsWithChildren, ReactNode, useState } from 'react'
 import Svg, { ClipPath, Color, Defs, Path } from 'react-native-svg'
 import { getSvgPath } from 'figma-squircle'
+import 'react-native-get-random-values'
 import { nanoid } from 'nanoid'
 
 interface SquircleParams {
