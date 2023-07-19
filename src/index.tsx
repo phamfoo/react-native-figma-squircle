@@ -46,7 +46,7 @@ function SquircleBackground({
   strokeColor = '#000',
   strokeWidth = 0,
 }: SquircleParams) {
-  const squircleId = nanoid()
+  const [clipPathId] = React.useState(() => `clip-${nanoid()}`)
 
   return (
     <Rect style={StyleSheet.absoluteFill}>
@@ -73,8 +73,6 @@ function SquircleBackground({
         } else {
           // Since SVG doesn't support inner stroke, we double the stroke width
           // and remove the outer half with clipPath
-          const clipPathId = `clip-${squircleId}`
-
           return (
             <Svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`}>
               <Defs>
