@@ -1,10 +1,6 @@
 import React, { PropsWithChildren } from 'react'
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, View, Text, Pressable } from 'react-native'
-import { LinearGradient } from 'expo-linear-gradient'
-import MaskedView, {
-  MaskedViewProps,
-} from '@react-native-community/masked-view'
+import { View, Text, Pressable } from 'react-native'
 import { SquircleView } from 'react-native-figma-squircle'
 
 export default function App() {
@@ -28,15 +24,11 @@ export default function App() {
           <Label>{`Without\n corner smoothing`}</Label>
           <Spacer />
 
-          <GradientView
-            maskElement={
-              <View
-                style={[
-                  StyleSheet.absoluteFill,
-                  { borderRadius: 48, backgroundColor: '#000' },
-                ]}
-              />
-            }
+          <View
+            style={[
+              { width: '100%', aspectRatio: 1 },
+              { borderRadius: 48, backgroundColor: '#56CDF2' },
+            ]}
           />
 
           <Spacer />
@@ -63,13 +55,13 @@ export default function App() {
           <Label>{`With\n corner smoothing`}</Label>
           <Spacer />
 
-          <GradientView
-            maskElement={
-              <SquircleView
-                style={StyleSheet.absoluteFill}
-                squircleParams={{ cornerRadius: 48, cornerSmoothing: 1 }}
-              />
-            }
+          <SquircleView
+            style={{ width: '100%', aspectRatio: 1 }}
+            squircleParams={{
+              cornerRadius: 48,
+              cornerSmoothing: 1,
+              fillColor: '#56CDF2',
+            }}
           />
 
           <Spacer />
@@ -110,26 +102,6 @@ function ContentColumn({ children }: PropsWithChildren<{}>) {
     >
       {children}
     </View>
-  )
-}
-
-function GradientView({
-  maskElement,
-}: {
-  maskElement: MaskedViewProps['maskElement']
-}) {
-  return (
-    <MaskedView
-      style={{ width: '100%', aspectRatio: 1 }}
-      maskElement={maskElement}
-    >
-      <LinearGradient
-        style={StyleSheet.absoluteFill}
-        start={{ x: 1, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        colors={['#FF1B6B', '#45CAFF']}
-      />
-    </MaskedView>
   )
 }
 
