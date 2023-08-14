@@ -1,8 +1,9 @@
 import * as React from 'react'
 import { ViewProps, View, StyleSheet } from 'react-native'
 import { PropsWithChildren, ReactNode, useState } from 'react'
-import Svg, { Color, Path } from 'react-native-svg'
+import Svg, { ClipPath, Color, Defs, Path, LinearGradient, Stop } from 'react-native-svg'
 import { getSvgPath } from 'figma-squircle'
+import { useId } from "@reach/auto-id";
 
 interface SquircleParams {
   cornerRadius?: number
@@ -12,7 +13,9 @@ interface SquircleParams {
   bottomLeftCornerRadius?: number
   cornerSmoothing: number
   fillColor?: Color
+  fillGradientColors?: Color[]
   strokeColor?: Color
+  strokeGradientColors?: Color[]
   strokeWidth?: number
 }
 
@@ -43,75 +46,75 @@ function SquircleBackground({
   fillColor = '#000',
   strokeColor = '#000',
   strokeWidth = 0,
+  fillGradientColors,
+  strokeGradientColors,
 }: SquircleParams) {
+  const squircleId = useId()
+
   return (
     <Rect style={StyleSheet.absoluteFill}>
       {({ width, height }) => {
+        const squirclePath = getSvgPath({
+          width,
+          height,
+          cornerSmoothing,
+          cornerRadius,
+          topLeftCornerRadius,
+          topRightCornerRadius,
+          bottomRightCornerRadius,
+          bottomLeftCornerRadius,
+        })
+
         const hasStroke = strokeWidth > 0
 
         if (!hasStroke) {
-          const squirclePath = getSvgPath({
-            width,
-            height,
-            cornerSmoothing,
-            cornerRadius,
-            topLeftCornerRadius,
-            topRightCornerRadius,
-            bottomRightCornerRadius,
-            bottomLeftCornerRadius,
-          })
-
           return (
             <Svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`}>
               <Path d={squirclePath} fill={fillColor} />
             </Svg>
           )
         } else {
-          const cornerRadii = [
-            cornerRadius,
-            topLeftCornerRadius,
-            topRightCornerRadius,
-            bottomLeftCornerRadius,
-            bottomRightCornerRadius,
-          ].filter(
-            (cornerRadius) => typeof cornerRadius === 'number'
-          ) as number[]
-
-          const maxStrokeWidth = Math.min(...cornerRadii)
-          strokeWidth = Math.min(strokeWidth, maxStrokeWidth)
-          const insetAmount = strokeWidth / 2
-
-          const insetSquirclePath = getSvgPath({
-            width: width - strokeWidth,
-            height: height - strokeWidth,
-            cornerSmoothing,
-            cornerRadius: getInnerRadius(cornerRadius, insetAmount),
-            topLeftCornerRadius: getInnerRadius(
-              topLeftCornerRadius,
-              insetAmount
-            ),
-            topRightCornerRadius: getInnerRadius(
-              topRightCornerRadius,
-              insetAmount
-            ),
-            bottomRightCornerRadius: getInnerRadius(
-              bottomRightCornerRadius,
-              insetAmount
-            ),
-            bottomLeftCornerRadius: getInnerRadius(
-              bottomLeftCornerRadius,
-              insetAmount
-            ),
-          })
+          // Since SVG doesn't support inner stroke, we double the stroke width
+          // and remove the outer half with clipPath
+          const clipPathId = `clip-${squircleId}`
 
           return (
             <Svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`}>
+              <Defs>
+                <ClipPath id={clipPathId}>
+                  <Path d={squirclePath} />
+                </ClipPath>
+              </Defs>
+              {
+                strokeGradientColors?.length ?
+                  <Defs>
+                    <LinearGradient id="strokeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      {strokeGradientColors.map((color, index) => (
+                        <Stop key={index} offset={`${(index / (strokeGradientColors.length - 1)) * 100}%`} stopColor={color} />
+                      ))}
+                    </LinearGradient>
+                  </Defs>
+                  : null
+              }
+
+              {
+                fillGradientColors?.length ?
+                  <Defs>
+                    <LinearGradient id="fillGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      {fillGradientColors?.map((color, index) => (
+                        <Stop key={index} offset={`${(index / (fillGradientColors.length - 1)) * 100}%`} stopColor={color} />
+                      ))}
+                    </LinearGradient>
+                  </Defs>
+                  : null
+              }
+
               <Path
-                d={insetSquirclePath}
-                fill={fillColor}
-                stroke={strokeColor}
-                strokeWidth={strokeWidth}
-                translate={insetAmount}
+                clipPath={`url(#${clipPathId})`}
+                d={squirclePath}
+                fill={fillGradientColors?.length ? "url(#fillGradient)" : fillColor}
+                stroke={strokeGradientColors?.length ? "url(#strokeGradient)": strokeColor}
+                strokeWidth={strokeWidth * 2}
               />
             </Svg>
           )
@@ -119,14 +122,6 @@ function SquircleBackground({
       }}
     </Rect>
   )
-}
-
-function getInnerRadius(radius: number | undefined, insetAmount: number) {
-  if (radius) {
-    return Math.max(0, radius - insetAmount)
-  }
-
-  return radius
 }
 
 // Inspired by https://reach.tech/rect/
