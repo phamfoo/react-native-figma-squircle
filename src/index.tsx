@@ -70,7 +70,18 @@ function SquircleBackground({
         if (!hasStroke) {
           return (
             <Svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`}>
-              <Path d={squirclePath} fill={fillColor} />
+              {
+                fillGradientColors?.length ?
+                  <Defs>
+                    <LinearGradient id="fillGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      {fillGradientColors?.map((color, index) => (
+                        <Stop key={index} offset={`${(index / (fillGradientColors.length - 1)) * 100}%`} stopColor={color} />
+                      ))}
+                    </LinearGradient>
+                  </Defs>
+                  : null
+              }
+              <Path d={squirclePath} fill={fillGradientColors?.length ? "url(#fillGradient)" : fillColor} />
             </Svg>
           )
         } else {
@@ -78,6 +89,7 @@ function SquircleBackground({
           // and remove the outer half with clipPath
           const clipPathId = `clip-${squircleId}`
 
+          // @ts-ignore
           return (
             <Svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`}>
               <Defs>
