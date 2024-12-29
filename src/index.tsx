@@ -74,7 +74,7 @@ function SquircleBackground({
             bottomLeftCornerRadius,
             bottomRightCornerRadius,
           ].filter(
-            (cornerRadius) => typeof cornerRadius === 'number'
+            (cornerRadius) => cornerRadius && cornerRadius > 0
           ) as number[]
 
           const maxStrokeWidth = Math.min(...cornerRadii)
