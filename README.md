@@ -12,7 +12,7 @@
 
 Figma has a great feature called [corner smoothing](https://help.figma.com/hc/en-us/articles/360050986854-Adjust-corner-radius-and-smoothing), allowing you to create rounded shapes with a seamless continuous curve (squircles).
 
-![](demo.png)
+![](squircle.jpg)
 
 This library helps you bring those squircles to your React Native apps.
 
@@ -25,20 +25,15 @@ This library is a very light abstraction on top of [figma-squircle](https://gith
 
 ## Installation
 
-Install [react-native-svg](https://github.com/react-native-svg/react-native-svg)
+Install [react-native-svg](https://github.com/software-mansion/react-native-svg)
 
-Then install this library:
-
-```sh
-yarn add react-native-figma-squircle
-```
-
-or
+Install this library:
 
 ```sh
 npm install react-native-figma-squircle
 ```
 
+Make sure [the New Architecture](https://reactnative.dev/architecture/landing-page) is enabled.
 ## Usage
 
 A `SquircleView` can be used just like a normal `View`, except the background is rendered separately from the view background. So to change how it looks, you'll have to use the `squircleParams` prop instead of the `style` prop.
