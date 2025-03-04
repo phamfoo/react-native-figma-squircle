@@ -1,6 +1,12 @@
 import * as React from 'react'
-import { ViewProps, View, StyleSheet } from 'react-native'
-import { PropsWithChildren, ReactNode, useState } from 'react'
+import { ViewProps, View, StyleSheet, Platform } from 'react-native'
+import {
+  PropsWithChildren,
+  ReactNode,
+  useState,
+  useRef,
+  useLayoutEffect,
+} from 'react'
 import Svg, { Color, Path } from 'react-native-svg'
 import { getSvgPath } from 'figma-squircle'
 
@@ -130,27 +136,41 @@ function getInnerRadius(radius: number | undefined, insetAmount: number) {
 }
 
 // Inspired by https://reach.tech/rect/
-interface RectProps extends ViewProps {
+interface RectProps extends Omit<ViewProps, 'children'> {
   children: (rect: { width: number; height: number }) => ReactNode
 }
 
 function Rect({ children, ...rest }: RectProps) {
-  const [rect, setRect] =
-    useState<{ width: number; height: number } | null>(null)
+  const [rect, setRect] = useState<{ width: number; height: number } | null>(
+    null
+  )
+  const ref = useRef<View>(null)
+
+  useLayoutEffect(() => {
+    if (!isSyncLayoutAccessAvailable()) {
+      throw new Error("This library requires React Native's new architecture.")
+    }
+
+    // TODO: Maybe use `getBoundingClientRect` instead when it's stable https://gist.github.com/lunaleaps/148756563999c83220887757f2e549a3#file-tooltip-uselayouteffect-js-L77
+    // From my testing, `measureInWindow` is still faster than `unstable_getBoundingClientRect`
+    ref.current?.measureInWindow((_x, _y, width, height) => {
+      setRect({ width, height })
+    })
+  }, [])
 
   return (
-    <View
-      {...rest}
-      onLayout={(e) => {
-        setRect({
-          width: e.nativeEvent.layout.width,
-          height: e.nativeEvent.layout.height,
-        })
-      }}
-    >
+    <View ref={ref} {...rest}>
       {rect ? children(rect) : null}
     </View>
   )
+}
+
+function isSyncLayoutAccessAvailable() {
+  if (Platform.OS === 'web') {
+    return true
+  }
+
+  return (globalThis as any).RN$Bridgeless === true
 }
 
 export { SquircleView, getSvgPath }
